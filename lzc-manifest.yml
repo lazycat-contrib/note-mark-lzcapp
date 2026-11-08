@@ -1,0 +1,40 @@
+application:
+  subdomain: note-mark
+  multi_instance: false
+  # ENABLE_INTERNAL_SIGNUP 默认 true：网页自助注册（papra 判例）→ public_path 开放
+  public_path:
+    - /
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://note-mark:8080/
+
+services:
+  note-mark:
+    # upstream: ghcr.io/enchant97/note-mark:1.1.2
+    image: ghcr.1ms.run/enchant97/note-mark:1.1.2
+    environment:
+      - TZ=Asia/Shanghai
+      - BIND__HOST=0.0.0.0
+      - BIND__PORT=8080
+      - AUTH_TOKEN__SECRET={{ printf "%x%x" (stable_secret "note_mark_auth_1") (stable_secret "note_mark_auth_2") }}
+      - DATA_PATH=/lzcapp/var/data
+      - PUBLIC_URL={{ .U.public_url }}
+    binds:
+      - /lzcapp/var/data:/data
+
+usage: |
+  Note Mark 是一个极简的自托管笔记应用，支持 Markdown 与富文本编辑器，
+  可对笔记分层级组织，并提供分享链接功能。
+
+  使用方法：
+  1. 打开应用后，点击注册按钮自助创建账号（首个注册用户请妥善保管凭据）。
+  2. 部署时可在参数中填写 PUBLIC_URL（对外访问的完整地址，如
+     https://note-mark.你的域名.com，末尾不带斜杠），用于生成分享/密码重置等
+     绝对链接；默认值仅适用于本机测试。
+  3. 笔记数据存放在 /lzcapp/var/data，升级或迁移时请备份该目录。
+
+  说明：
+  - 本包未做实机验证，功能以官方文档为准：https://github.com/enchant97/note-mark
+  - 许可为 AGPL-3.0，全文随包附带，见 /package-licenses/。

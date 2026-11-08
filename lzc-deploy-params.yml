@@ -1,0 +1,17 @@
+params:
+  - id: public_url
+    type: string
+    name: "对外访问地址 (PUBLIC_URL)"
+    description: "应用的完整对外访问地址（如 https://note-mark.example.com，末尾不带斜杠），用于生成分享等绝对链接。默认值仅适合本机测试。"
+    default_value: "http://localhost:8080"
+    optional: false
+
+locales:
+  zh:
+    public_url:
+      name: "对外访问地址 (PUBLIC_URL)"
+      description: "应用的完整对外访问地址（末尾不带斜杠），默认值仅适合本机测试。"
+  en:
+    public_url:
+      name: "Public URL (PUBLIC_URL)"
+      description: "Full public URL of the app (no trailing slash). Default is for local testing only."
